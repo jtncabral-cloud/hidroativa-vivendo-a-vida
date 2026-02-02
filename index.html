@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Hidroativa – Vivendo a Vida</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f9f9;
+  margin: 0;
+}
+header {
+  background: #0aa6a6;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+nav {
+  display: flex;
+  background: #088;
+}
+nav button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: #088;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+nav button:hover {
+  background: #066;
+}
+section {
+  display: none;
+  padding: 20px;
+}
+section.active {
+  display: block;
+}
+label {
+  display: block;
+  margin-top: 10px;
+}
+input {
+  width: 100%;
+  padding: 6px;
+}
+.save {
+  margin-top: 15px;
+  background: #0aa6a6;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+}
+.save:hover {
+  background: #078;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Hidroativa – Vivendo a Vida</h1>
+</header>
+
+<nav>
+  <button onclick="showTab('anamnese')">Anamnese</button>
+  <button onclick="showTab('avaliacao')">Avaliação Física</button>
+  <button onclick="showTab('bio')">Bioimpedância</button>
+</nav>
+
+<section id="anamnese" class="active">
+  <h2>Anamnese</h2>
+  <label>Fumante?</label><input id="fumante">
+  <label>Consome bebida alcoólica?</label><input id="bebida">
+  <label>Doenças crônicas</label><input id="doencas">
+  <label>Uso de medicamentos</label><input id="medicamentos">
+  <label>Histórico cardíaco</label><input id="cardiaco">
+  <label>Dores articulares</label><input id="dores">
+  <button class="save" onclick="save('anamnese')">Salvar Anamnese</button>
+</section>
+
+<section id="avaliacao">
+  <h2>Avaliação Física – Rikli & Jones</h2>
+  <label>Sentar e Levantar (30s)</label><input id="sentar">
+  <label>Flexão de Braço (30s)</label><input id="flexao">
+  <label>Marcha Estacionária (2 min)</label><input id="marcha">
+  <label>Alcance Sentado</label><input id="alcance">
+  <label>Alcance Costas</label><input id="costas">
+  <button class="save" onclick="save('avaliacao')">Salvar Avaliação</button>
+</section>
+
+<section id="bio">
+  <h2>Bioimpedância – Omron 514</h2>
+  <label>Peso (kg)</label><input id="peso">
+  <label>Altura (m)</label><input id="altura">
+  <label>% Gordura</label><input id="gordura">
+  <label>Massa Magra</label><input id="magra">
+  <button class="save" onclick="save('bio')">Salvar Bioimpedância</button>
+</section>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function save(tab){
+  const data = {};
+  document.querySelectorAll(`#${tab} input`).forEach(i => data[i.id] = i.value);
+  localStorage.setItem(tab, JSON.stringify(data));
+  alert('Dados salvos com sucesso!');
+}
+
+window.onload = () => {
+  ['anamnese','avaliacao','bio'].forEach(tab=>{
+    const data = JSON.parse(localStorage.getItem(tab));
+    if(data){
+      Object.keys(data).forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.value = data[id];
+      });
+    }
+  });
+}
+</script>
+
+</body>
+</html>
